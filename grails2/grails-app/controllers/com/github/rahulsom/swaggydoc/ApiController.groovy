@@ -12,8 +12,6 @@ class ApiController {
 
     def index() { /* Render GSP as HTML */ }
 
-    def images() { response.sendRedirect(g.resource(dir: 'images', file: 'throbber.gif').toString()) }
-
     /**
      * Renders the Swagger Resources.
      * @return

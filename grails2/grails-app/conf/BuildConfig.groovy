@@ -58,5 +58,7 @@ grails.project.dependency.resolution = {
         }
         test (":marshallers:0.6")
 
+        compile ":asset-pipeline:2.13.1"
+
     }
 }

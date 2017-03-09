@@ -5,61 +5,80 @@
     <title>Swagger UI</title>
     <link href='//fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'/>
 
-    <link href="${g.resource(dir: 'css', file: 'reset.css')}" media='screen' rel='stylesheet' type='text/css'/>
-    <link href="${g.resource(dir: 'css', file: 'screen.css')}" media='screen' rel='stylesheet' type='text/css'/>
-    <script src="${g.resource(dir: 'js/swagger-lib', file: 'shred.bundle.js')}" type='text/javascript'></script>
-    <script src="${g.resource(dir: 'js/swagger-lib', file: 'jquery-1.8.0.min.js')}" type='text/javascript'></script>
-    <script src="${g.resource(dir: 'js/swagger-lib', file: 'jquery.slideto.min.js')}" type='text/javascript'></script>
-    <script src="${g.resource(dir: 'js/swagger-lib', file: 'jquery.wiggle.min.js')}" type='text/javascript'></script>
-    <script src="${g.resource(dir: 'js/swagger-lib', file: 'jquery.ba-bbq.min.js')}" type='text/javascript'></script>
-    <script src="${g.resource(dir: 'js/swagger-lib', file: 'handlebars-1.0.0.js')}" type='text/javascript'></script>
-    <script src="${g.resource(dir: 'js/swagger-lib', file: 'underscore-min.js')}" type='text/javascript'></script>
-    <script src="${g.resource(dir: 'js/swagger-lib', file: 'backbone-min.js')}" type='text/javascript'></script>
-    <script src="${g.resource(dir: 'js/swagger-lib', file: 'swagger.js')}" type='text/javascript'></script>
-    <script src="${g.resource(dir: 'js/', file: 'swagger-ui.js')}" type='text/javascript'></script>
-    <script src="${g.resource(dir: 'js/swagger-lib', file: 'highlight.7.3.pack.js')}" type='text/javascript'></script>
+    <asset:stylesheet href="swagger/typography.css" media='screen'/>
+    <asset:stylesheet href="swagger/reset.css" media='screen'/>
+    <asset:stylesheet href="swagger/screen.css" media='screen'/>
+    <asset:stylesheet href="swagger/reset.css" media='print'/>
+    <asset:stylesheet href="swagger/print.css" media='print'/>
 
-    <!-- enabling this will enable oauth2 implicit scope support -->
-    <script src="${g.resource(dir: 'js/swagger-lib', file: 'swagger-oauth.js')}" type='text/javascript'></script>
+    <asset:javascript src="swagger/swagger-lib/object-assign-pollyfill.js" />
+    <asset:javascript src="swagger/swagger-lib/jquery-1.8.0.min.js" />
+    <asset:javascript src="swagger/swagger-lib/jquery.slideto.min.js" />
+    <asset:javascript src="swagger/swagger-lib/jquery.wiggle.min.js" />
+    <asset:javascript src="swagger/swagger-lib/jquery.ba-bbq.min.js" />
+    <asset:javascript src="swagger/swagger-lib/handlebars-4.0.5.js" />
+    <asset:javascript src="swagger/swagger-lib/lodash.min.js" />
+    <asset:javascript src="swagger/swagger-lib/backbone-min.js" />
+    <asset:javascript src="swagger/swagger-ui.js" />
+    <asset:javascript src="swagger/swagger-lib/highlight.9.1.0.pack.js" />
+    <asset:javascript src="swagger/swagger-lib/highlight.9.1.0.pack_extended.js" />
+    <asset:javascript src="swagger/swagger-lib/jsoneditor.min.js" />
+    <asset:javascript src="swagger/swagger-lib/marked.js" />
+    <asset:javascript src="swagger/swagger-lib/swagger-oauth.js" />
 
     <script type="text/javascript">
         $(function () {
-            window.swaggerUi = new SwaggerUi({
-                url: "${g.createLink(controller: 'api', action: 'resources')}",
-                dom_id: "swagger-ui-container",
-                supportedSubmitMethods: ['get', 'post', 'put', 'delete'],
-                onComplete: function (swaggerApi, swaggerUi) {
-                    log("Loaded SwaggerUI");
+            var url = window.location.search.match(/url=([^&]+)/);
+            if (url && url.length > 1) {
+                url = decodeURIComponent(url[1]);
+            } else {
+                url = "${g.createLink(controller: 'api', action: 'resources')}";
+            }
 
-                    if (typeof initOAuth == "function") {
-                        /*
-                         initOAuth({
-                         clientId: "your-client-id",
-                         realm: "your-realms",
-                         appName: "your-app-name"
-                         });
-                         */
+            hljs.configure({
+                highlightSizeThreshold: 5000
+            });
+
+            // Pre load translate...
+            if(window.SwaggerTranslator) {
+                window.SwaggerTranslator.translate();
+            }
+            window.swaggerUi = new SwaggerUi({
+                url: url,
+                dom_id: "swagger-ui-container",
+                supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
+                onComplete: function(swaggerApi, swaggerUi){
+                    if(typeof initOAuth == "function") {
+                        initOAuth({
+                            clientId: "your-client-id",
+                            clientSecret: "your-client-secret-if-required",
+                            realm: "your-realms",
+                            appName: "your-app-name",
+                            scopeSeparator: " ",
+                            additionalQueryStringParams: {}
+                        });
                     }
-                    $('pre code').each(function (i, e) {
-                        hljs.highlightBlock(e)
-                    });
+
+                    if(window.SwaggerTranslator) {
+                        window.SwaggerTranslator.translate();
+                    }
                 },
-                onFailure: function (data) {
+                onFailure: function(data) {
                     log("Unable to Load SwaggerUI");
                 },
                 docExpansion: "none",
-                sorter: "alpha"
+                jsonEditor: false,
+                defaultModelRendering: 'schema',
+                showRequestHeaders: false
             });
 
-            $('#input_apiKey').change(function () {
-                var key = $('#input_apiKey')[0].value;
-                log("key: " + key);
-                if (key && key.trim() != "") {
-                    log("added key " + key);
-                    window.authorizations.add("key", new ApiKeyAuthorization("api_key", key, "query"));
-                }
-            });
             window.swaggerUi.load();
+
+            function log() {
+                if ('console' in window) {
+                    console.log.apply(console, arguments);
+                }
+            }
         });
     </script>
 </head>
@@ -67,25 +86,16 @@
 <body class="swagger-section">
 <div id='header'>
     <div class="swagger-ui-wrap">
-        <a id="logo" href="${g.createLink(controller: 'api')}">swagger</a>
-
+        <a id="logo" href="${g.createLink(controller: 'api')}"><asset:image class="logo__img" alt="swagger" height="30" width="30" src="images/logo_small.png" /><span class="logo__title">swagger</span></a>
         <form id='api_selector'>
-            <div class='input'>
-                <input placeholder="http://example.com/api" id="input_baseUrl" name="baseUrl"
-                       type="text" readonly="true"/>
-            </div>
-
-            <div class='input'>
-                <input placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/>
-            </div>
-
-            <div class='input'><a id="explore" href="#">Explore</a></div>
+            <div class='input'><input placeholder="${g.createLink(controller: 'api', action: 'resources')}" id="input_baseUrl" name="baseUrl" type="text"/></div>
+            <div id='auth_container'></div>
+            <div class='input'><a id="explore" class="header__btn" href="#" data-sw-translate>Explore</a></div>
         </form>
     </div>
 </div>
 
-<div id="message-bar" class="swagger-ui-wrap">&nbsp;</div>
-
+<div id="message-bar" class="swagger-ui-wrap" data-sw-translate>&nbsp;</div>
 <div id="swagger-ui-container" class="swagger-ui-wrap"></div>
 </body>
 </html>
