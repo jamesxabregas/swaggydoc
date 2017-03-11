@@ -45,6 +45,7 @@ grails.project.dependency.resolution = {
         // runtime 'mysql:mysql-connector-java:5.1.27'
         compile 'com.wordnik:swagger-annotations:1.3.8'
         compile 'com.github.rahulsom:swaggydoc-commons:0.28.0'
+        compile "io.swagger:swagger-annotations:1.5.12"
     }
 
     plugins {

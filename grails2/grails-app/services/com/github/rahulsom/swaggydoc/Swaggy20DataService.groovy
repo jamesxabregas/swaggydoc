@@ -1,9 +1,13 @@
 package com.github.rahulsom.swaggydoc
 
-import com.wordnik.swagger.annotations.*
 import grails.util.Holders
 import groovy.transform.CompileStatic
 import groovy.transform.Memoized
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiImplicitParam
+import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.ApiResponses
+import io.swagger.annotations.Info
 import org.codehaus.groovy.grails.commons.*
 import org.codehaus.groovy.grails.validation.ConstrainedProperty
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
@@ -17,9 +21,9 @@ import java.lang.reflect.Method
 import java.util.function.BiConsumer
 import java.util.function.Function
 
-class SwaggyDataService {
+class Swaggy20DataService {
 
-    private static final String SwaggerVersion = '1.2'
+    private static final String SwaggerVersion = '2.0'
     private static final List<String> DefaultResponseContentTypes = [
             'application/json', 'application/xml', 'text/html'
     ]
@@ -115,6 +119,7 @@ class SwaggyDataService {
                 }
 
 //        if (resourcePathParts?.size()) {
+//
 //            // UrlMappings may override the resourcePath
 //            if (resourcePathParts[-1].matches(/^\{.+\}$/)) {
 //                resourcePathParts.pop()
@@ -190,6 +195,7 @@ class SwaggyDataService {
     private ControllerDefinition defineController(
             Api api, String absoluteBasePath, String resourcePath, String basePath, Class<Object> theControllerClazz,
             List<MethodDocumentation> groupedApis, Map<String, ModelDescription> models) {
+
         new ControllerDefinition(
                 apiVersion: apiVersion,
                 swaggerVersion: SwaggerVersion,
@@ -304,6 +310,8 @@ class SwaggyDataService {
     @CompileStatic
     @SuppressWarnings("GrMethodMayBeStatic")
     private Pair<List<String>, List<Parameter>> populatePaths(UrlMapping mapping) {
+
+
         List<Parameter> pathParams = []
         List<String> pathParts = []
         def constraintIdx = 0
@@ -337,7 +345,7 @@ class SwaggyDataService {
     private ApiDeclaration controllerToApi(GrailsClass controller) {
         def name = controller.logicalPropertyName
         new ApiDeclaration(
-                path: grailsLinkGenerator.link(controller: 'api', action: 'show', id: name, absolute: true),
+                path: grailsLinkGenerator.link(controller: 'api20', action: 'show', id: name, absolute: true),
                 description: getApi(controller).description() ?: controller.naturalName
         )
     }
