@@ -96,14 +96,26 @@ task('generate-sources') << {
               replace('org.codehaus.groovy.grails','grails').
               replace('grails.commons.*','grails.core.*\nimport grails.util.GrailsClassUtils')
 
+    new File("${rootDir}/swaggydoc-grails3/grails-app/services/com/github/rahulsom/swaggydoc/Swaggy20DataService.groovy").text =
+              new File("${rootDir}/grails2/grails-app/services/com/github/rahulsom/swaggydoc/Swaggy20DataService.groovy").text.
+              replace('org.codehaus.groovy.grails','grails').
+              replace('grails.commons.*','grails.core.*\nimport grails.util.GrailsClassUtils')
+
     //Copy ApiController
     new File("${rootDir}/swaggydoc-grails3/grails-app/controllers/com/github/rahulsom/swaggydoc/ApiController.groovy").text =
               new File("${rootDir}/grails2/grails-app/controllers/com/github/rahulsom/swaggydoc/ApiController.groovy").text
+
+    //Copy Api20Controller
+    new File("${rootDir}/swaggydoc-grails3/grails-app/controllers/com/github/rahulsom/swaggydoc/Api20Controller.groovy").text =
+              new File("${rootDir}/grails2/grails-app/controllers/com/github/rahulsom/swaggydoc/Api20Controller.groovy").text
 
     //Copy api view
     new File("${rootDir}/swaggydoc-grails3/grails-app/views/api/index.gsp").text =
               new File("${rootDir}/grails2/grails-app/views/api/index.gsp").text
 
+    //Copy ap2i view
+    new File("${rootDir}/swaggydoc-grails3/grails-app/views/api20/index.gsp").text =
+              new File("${rootDir}/grails2/grails-app/views/api20/index.gsp").text
 }
 
 compileGroovy.dependsOn('generate-sources')

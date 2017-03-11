@@ -57,6 +57,11 @@ grails.project.dependency.resolution = {
         build (":tomcat:7.0.55") {
             export = false
         }
+
+        runtime (":hibernate4:4.3.10") {
+            export = false
+        }
+
         test (":marshallers:0.6")
 
         compile ":asset-pipeline:2.13.1"
