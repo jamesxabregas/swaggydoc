@@ -5,6 +5,7 @@ import grails.rest.RestfulController
 
 @Api("photo")
 class PhotoController extends RestfulController<Photo> {
+    static responseFormats = ['json', 'xml']
 
     PhotoController() {
         super(Photo)

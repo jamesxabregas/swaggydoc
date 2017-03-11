@@ -5,43 +5,44 @@ import grails.rest.RestfulController
 
 @Api("album")
 class AlbumController extends RestfulController<Album> {
+    static responseFormats = ['json', 'xml']
 
     AlbumController() {
         super(Album)
     }
 
     @Override
-    Object show() {
-        return super.show()
+    def show() {
+        super.show()
     }
 
     @Override
-    Object index(Integer max) {
-        return super.index(max)
+    def index(Integer max) {
+        super.index(max)
     }
 
     @Override
-    Object save() {
-        return super.save()
+    def save() {
+        super.save()
     }
 
     @Override
-    Object edit() {
-        return super.edit()
+    def edit() {
+        super.edit()
     }
 
     @Override
-    Object patch() {
-        return super.patch()
+    def patch() {
+        super.patch()
     }
 
     @Override
-    Object update() {
-        return super.update()
+    def update() {
+        super.update()
     }
 
     @Override
-    Object delete() {
-        return super.delete()
+    def delete() {
+        super.delete()
     }
 }

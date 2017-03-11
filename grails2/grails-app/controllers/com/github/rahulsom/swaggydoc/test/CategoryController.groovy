@@ -7,6 +7,8 @@ import grails.rest.RestfulController
 
 @Api(value = 'Categories')
 class CategoryController extends RestfulController {
+    static responseFormats = ['json', 'xml']
+
     CategoryController() {
         super(Category)
     }

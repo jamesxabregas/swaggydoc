@@ -17,6 +17,7 @@ import grails.transaction.Transactional
         consumes = 'application/json,application/xml,application/x-www-form-urlencoded'
 )
 class PogoController {
+    static responseFormats = ['json', 'xml']
 
     static allowedMethods = [
             save: 'POST'
